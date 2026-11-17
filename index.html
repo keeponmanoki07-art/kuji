@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a4f73">
+<meta name="format-detection" content="telephone=no">
+<title>徳之島町 レンタカー分乗くじ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --deep:#0a4f73; --sea:#0b7fa5; --lagoon:#4cc3c9; --sand:#f7f1e3; --sand2:#efe5cf;
+  --green:#1f6b4a; --cane:#7fb352; --coral:#ef5b3f; --hibiscus:#d93b4a; --sun:#ffc861;
+  --ink:#1d2b33; --muted:#6b7a82; --line:#e3d9c2; --white:#fff;
+  --c1:#0b7fa5; --c1bg:#e4f4f8; --c2:#e0553c; --c2bg:#fdece7;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--sand);color:var(--ink);
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic","Meiryo",sans-serif;
+  font-weight:500;line-height:1.5;overscroll-behavior-y:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation}
+input{font:inherit;font-size:16px}
+.wrap{max-width:560px;margin:0 auto;padding:0 14px 120px}
+
+/* hero */
+.hero{position:relative;height:200px;overflow:hidden;color:#fff;max-width:560px;margin:0 auto}
+.hero svg{position:absolute;inset:0;width:100%;height:100%}
+.hero-text{position:relative;padding:22px 20px 0}
+.kicker{margin:0;font-size:13px;letter-spacing:.12em;opacity:.9}
+.hero h1{margin:4px 0 2px;font-size:30px;font-weight:900;line-height:1.15;letter-spacing:.04em;text-shadow:0 2px 0 rgba(0,0,0,.15)}
+.sub{margin:0;font-size:13px;opacity:.95}
+
+/* cards */
+.card{background:var(--white);border-radius:18px;padding:16px;margin-top:14px;box-shadow:0 2px 0 var(--sand2),0 6px 18px rgba(10,79,115,.07)}
+.card:first-child{margin-top:-18px;position:relative}
+.card h2{margin:0 0 10px;font-size:17px;font-weight:900;display:flex;align-items:center;gap:8px}
+.card h2 .num{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--deep);color:#fff;font-size:13px}
+.hint{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+
+/* members */
+.school{display:flex;align-items:flex-start;gap:8px;padding:9px 0;border-top:1px dashed var(--line)}
+.school:first-of-type{border-top:0}
+.sname{flex:0 0 78px;font-weight:700;font-size:14.5px;padding-top:8px}
+.chips{flex:1;display:flex;flex-wrap:wrap;gap:6px}
+.chip{position:relative;min-height:38px;padding:7px 12px;border-radius:12px;background:var(--c1bg);border:1.5px solid transparent;font-size:14px;font-weight:700;line-height:1.3;display:inline-flex;align-items:center;gap:5px;text-align:left}
+.chips .chip,.mgrid .chip{background:#eef6f0;color:var(--green)}
+.mgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.mgrid .chip{width:100%;min-height:50px;font-size:15.5px;justify-content:space-between}
+.chip.absent{background:#eee!important;color:#9aa3a8!important;text-decoration:line-through}
+.chip .pin{font-size:10.5px;font-weight:900;color:#fff;border-radius:6px;padding:1px 5px;text-decoration:none}
+.pin.p1{background:var(--c1)} .pin.p2{background:var(--c2)}
+.add{min-height:38px;min-width:38px;border-radius:12px;border:1.5px dashed #b9c9bf;color:var(--green);font-size:20px;font-weight:700;line-height:1}
+
+/* split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.car{border-radius:14px;padding:12px 10px;text-align:center}
+.car.c1{background:var(--c1bg)} .car.c2{background:var(--c2bg)}
+.car .cname{font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px}
+.c1 .cname{color:var(--c1)} .c2 .cname{color:var(--c2)}
+.big{font-size:38px;font-weight:900;line-height:1.1}
+.big small{font-size:15px;margin-left:2px}
+.stepper{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px}
+.sbtn{width:44px;height:44px;border-radius:50%;background:#fff;font-size:24px;font-weight:900;color:var(--c1);box-shadow:0 2px 0 rgba(0,0,0,.08)}
+.sbtn:active{transform:translateY(1px)}
+.auto{font-size:12px;color:var(--muted);margin-top:14px}
+.total{display:flex;justify-content:space-between;align-items:center;font-size:14px;margin:12px 2px 0;color:var(--muted)}
+.total b{color:var(--ink);font-size:16px}
+.ghost{padding:8px 12px;border-radius:10px;background:var(--sand);font-size:13px;font-weight:700;color:var(--deep)}
+
+/* draw button */
+.drawbar{position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--sand) 70%,rgba(247,241,227,0));z-index:10}
+.draw{display:block;width:100%;max-width:532px;margin:0 auto;height:60px;border-radius:30px;color:#fff;font-size:19px;font-weight:900;letter-spacing:.06em;
+  background:linear-gradient(135deg,var(--coral),var(--hibiscus));box-shadow:0 4px 0 #a92a36,0 10px 20px rgba(217,59,74,.3)}
+.draw:active{transform:translateY(3px);box-shadow:0 1px 0 #a92a36}
+.draw[disabled]{opacity:.6}
+
+/* result */
+#result{scroll-margin-top:10px}
+.rcar{border-radius:16px;padding:12px;margin-top:10px}
+.rcar.c1{background:var(--c1bg)} .rcar.c2{background:var(--c2bg)}
+.rhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.rhead .cname{font-size:18px;font-weight:900;display:flex;align-items:center;gap:6px}
+.c1 .rhead .cname{color:var(--c1)} .c2 .rhead .cname{color:var(--c2)}
+.rcount{font-weight:900;font-size:15px;background:#fff;border-radius:20px;padding:3px 12px}
+.rlist{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.rlist .chip{background:#fff;width:100%;min-height:44px;font-size:15px;border-left:5px solid var(--c1)}
+.c2 .rlist .chip{border-left-color:var(--c2)}
+.rlist .empty{grid-column:1/-1;color:var(--muted);font-size:13px;text-align:center;padding:8px}
+.reveal{animation:pop .42s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pop{0%{opacity:0;transform:scale(.6) translateY(8px)}100%{opacity:1;transform:none}}
+.moved{animation:flash 1.4s ease both}
+@keyframes flash{0%,40%{box-shadow:0 0 0 3px var(--sun)}100%{box-shadow:0 0 0 0 rgba(255,200,97,0)}}
+.absentbox{margin-top:12px;padding:10px 12px;border-radius:12px;background:#f3f3f3;font-size:13.5px}
+.absentbox .chips{margin-top:6px}
+.rtools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.tool{min-height:48px;border-radius:14px;font-weight:900;font-size:15px;background:var(--deep);color:#fff}
+.tool.light{background:var(--sand);color:var(--deep)}
+.adjust{margin-top:12px;padding:10px;border-radius:12px;background:var(--sand);display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13.5px}
+.adjust .stepper{margin:0}
+.adjust .sbtn{width:40px;height:40px;font-size:20px}
+.adjust b{font-size:20px;min-width:26px;text-align:center;display:inline-block}
+.time{font-size:12px;color:var(--muted);text-align:right;margin-top:6px}
+
+/* shuffle overlay */
+#shuffle{position:fixed;inset:0;background:rgba(10,79,115,.88);display:none;place-items:center;z-index:40;color:#fff;text-align:center}
+#shuffle.on{display:grid}
+#shuffle .s1{font-size:15px;opacity:.85;letter-spacing:.2em}
+#shuffle .s2{font-size:40px;font-weight:900;margin-top:10px;min-height:60px}
+.waveicon{animation:bob 1s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+
+/* sheet */
+#back{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .2s;z-index:30}
+#back.on{opacity:1;pointer-events:auto}
+#sheet{position:fixed;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;background:#fff;border-radius:22px 22px 0 0;padding:10px 18px calc(18px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .25s ease,visibility 0s .25s;visibility:hidden;z-index:31;max-height:88vh;overflow-y:auto}
+#sheet.on{transform:none;visibility:visible;transition:transform .25s ease}
+.grab{width:40px;height:5px;border-radius:3px;background:#ddd;margin:0 auto 10px}
+#sheet h3{margin:0 0 12px;font-size:19px;font-weight:900}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:5px;font-weight:700}
+.field input{width:100%;height:46px;border-radius:12px;border:1.5px solid var(--line);padding:0 12px;background:var(--sand)}
+.seg{display:flex;background:var(--sand);border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;min-height:42px;border-radius:9px;font-weight:700;font-size:14.5px;color:var(--muted)}
+.seg button.sel{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.seg button.sel.a{color:#fff;background:#8a959b}
+.seg button.sel.p1{color:#fff;background:var(--c1)}
+.seg button.sel.p2{color:#fff;background:var(--c2)}
+.sheetbtns{display:grid;gap:8px;margin-top:6px}
+.sheetbtns .tool{width:100%}
+.danger{background:#fff;color:var(--hibiscus);border:1.5px solid #f1c3c7}
+
+#toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.25s;z-index:50;max-width:90vw;text-align:center;pointer-events:none}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:22px}
+.foot button{color:var(--muted);text-decoration:underline;font-size:12px;padding:8px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#0a4f73"/><stop offset=".55" stop-color="#1690a8"/><stop offset="1" stop-color="#5fd0cf"/>
+      </linearGradient>
+    </defs>
+    <rect width="400" height="200" fill="url(#sky)"/>
+    <circle cx="335" cy="56" r="34" fill="#ffc861" opacity=".22"/>
+    <circle cx="335" cy="56" r="22" fill="#ffd98a"/>
+    <!-- 島のシルエット（井之川岳をイメージ） -->
+    <path d="M150 150 C175 140 195 118 222 104 C240 95 252 84 268 86 C285 88 296 102 315 112 C338 124 360 134 400 140 L400 200 L150 200Z" fill="#1f6b4a"/>
+    <path d="M190 150 C215 142 238 132 262 128 C290 124 320 132 350 140 C370 145 390 147 400 148 L400 200 L190 200Z" fill="#2c8458"/>
+    <!-- ソテツ -->
+    <g stroke="#164f37" stroke-width="3" fill="none" stroke-linecap="round">
+      <path d="M248 136 L250 116"/>
+      <path d="M250 116 q-12 -6 -20 2 M250 116 q12 -7 21 1 M250 116 q-5 -12 -14 -12 M250 116 q6 -12 15 -11 M250 116 q0 -14 -1 -16"/>
+    </g>
+    <!-- 海 -->
+    <path d="M0 158 Q50 148 100 158 T200 158 T300 158 T400 158 V200 H0Z" fill="#0b7fa5"/>
+    <path d="M0 172 Q50 162 100 172 T200 172 T300 172 T400 172 V200 H0Z" fill="#0a6688"/>
+    <path d="M20 166 q15 -6 30 0 M130 180 q15 -6 30 0 M250 168 q15 -6 30 0 M330 184 q15 -6 30 0" stroke="#fff" stroke-opacity=".55" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- ハイビスカス -->
+    <g transform="translate(366 104)">
+      <g fill="#ef5b3f">
+        <ellipse rx="7" ry="11" transform="rotate(0) translate(0 -9)"/>
+        <ellipse rx="7" ry="11" transform="rotate(72) translate(0 -9)"/>
+        <ellipse rx="7" ry="11" transform="rotate(144) translate(0 -9)"/>
+        <ellipse rx="7" ry="11" transform="rotate(216) translate(0 -9)"/>
+        <ellipse rx="7" ry="11" transform="rotate(288) translate(0 -9)"/>
+      </g>
+      <circle r="4" fill="#ffd98a"/>
+    </g>
+  </svg>
+  <div class="hero-text">
+    <p class="kicker">徳之島町 小・中学校</p>
+    <h1>レンタカー<br>分乗くじ</h1>
+    <p class="sub">結い（ゆい）の心で 2台に分かれよう</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card">
+    <h2><span class="num">1</span>参加メンバー</h2>
+    <p class="hint">学校名をタップすると「欠席」や「乗る車の固定（運転手など）」を設定できます。</p>
+    <div id="members"></div>
+  </section>
+
+  <section class="card">
+    <h2><span class="num">2</span>2台の人数</h2>
+    <div class="split">
+      <div class="car c1">
+        <div class="cname">${CAR}1号車</div>
+        <div class="big"><span id="n1">0</span><small>人</small></div>
+        <div class="stepper">
+          <button class="sbtn" data-act="step" data-d="-1" aria-label="1号車を1人減らす">−</button>
+          <button class="sbtn" data-act="step" data-d="1" aria-label="1号車を1人増やす">＋</button>
+        </div>
+      </div>
+      <div class="car c2">
+        <div class="cname">${CAR}2号車</div>
+        <div class="big"><span id="n2">0</span><small>人</small></div>
+        <div class="auto">残りの人数が<br>自動で入ります</div>
+      </div>
+    </div>
+    <div class="total"><span id="totaltxt"></span><button class="ghost" data-act="half">半分ずつにする</button></div>
+  </section>
+
+  <section class="card" id="result" hidden>
+    <h2><span class="num">3</span>くじの結果</h2>
+    <div id="rbody"></div>
+  </section>
+
+  <div class="foot">
+    設定はこの端末に自動で保存されます<br>
+    <button data-act="reset" id="resetbtn">最初の状態に戻す</button>
+  </div>
+</main>
+
+<div class="drawbar"><button class="draw" id="drawbtn" data-act="draw">くじを引く！</button></div>
+
+<div id="shuffle"><div>
+  <div class="waveicon"><svg width="64" height="40" viewBox="0 0 64 40" aria-hidden="true"><path d="M2 26 Q12 14 22 26 T42 26 T62 26" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M2 36 Q12 24 22 36 T42 36 T62 36" stroke="#5fd0cf" stroke-width="4" fill="none" stroke-linecap="round"/></svg></div>
+  <div class="s1">シャッフル中…</div>
+  <div class="s2" id="shuffletxt"></div>
+</div></div>
+
+<div id="back" data-act="close"></div>
+<div id="sheet" role="dialog" aria-modal="true"></div>
+<div id="toast"></div>
+
+<script>
+(function(){
+const CAR_SVG='<svg width="22" height="16" viewBox="0 0 22 16" aria-hidden="true"><path d="M3 9 L5 4 Q6 2 8 2 H14 Q16 2 17 4 L19 9 Q21 9 21 11 V13 H1 V11 Q1 9 3 9Z" fill="currentColor"/><circle cx="6" cy="13" r="2.4" fill="#fff" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="13" r="2.4" fill="#fff" stroke="currentColor" stroke-width="1.6"/><path d="M6.5 8.5 L7.5 5 H10.5 V8.5Z M12 8.5 V5 H14.5 L15.8 8.5Z" fill="#fff" opacity=".85"/></svg>';
+document.querySelectorAll('.cname').forEach(el=>{el.innerHTML=el.innerHTML.replace('${CAR}',CAR_SVG)});
+
+const SCHOOLS=["亀津小","亀徳小","亀津中","神之嶺小","井之川中","母間小","花徳小","山小","東天城中","手々小中","尾母小中"];
+const KEY='tkn-bunjo-kuji-v2';
+const CIRC='①②③④⑤⑥⑦⑧⑨⑩';
+const $=s=>document.querySelector(s);
+let S=load();
+let justMoved=new Set(), revealNext=false, sheetId=null;
+
+function defaultState(){return{people:SCHOOLS.map((s,i)=>({id:'p'+i,school:s,name:'',absent:false,pin:0})),car1:6,manual:false,result:null,seq:SCHOOLS.length};}
+function load(){try{const t=localStorage.getItem(KEY);if(t){const o=JSON.parse(t);if(o&&Array.isArray(o.people))return o;}}catch(e){}return defaultState();}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const byId=id=>S.people.find(p=>p.id===id);
+const active=()=>S.people.filter(p=>!p.absent);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function label(p){return p.school;}
+function sortIds(ids){const k=id=>{const p=byId(id);return SCHOOLS.indexOf(p.school)*1000+S.people.indexOf(p);};return ids.slice().sort((a,b)=>k(a)-k(b));}
+function bounds(){const a=active();return{min:a.filter(p=>p.pin===1).length,max:a.length-a.filter(p=>p.pin===2).length,n:a.length};}
+function clampCar1(){const b=bounds();S.car1=Math.max(b.min,Math.min(b.max,S.car1));}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('on'),2200);}
+function buzz(ms){try{navigator.vibrate&&navigator.vibrate(ms);}catch(e){}}
+
+/* ---------- くじ・調整ロジック ---------- */
+function draw(){
+  clampCar1();
+  const act=active();
+  const a=act.filter(p=>p.pin===1).map(p=>p.id);
+  const b=act.filter(p=>p.pin===2).map(p=>p.id);
+  const free=shuffle(act.filter(p=>p.pin===0).map(p=>p.id));
+  while(a.length<S.car1&&free.length)a.push(free.pop());
+  b.push(...free);
+  S.result={a,b,at:Date.now()};
+}
+// 欠席・復帰・固定の変更を結果に反映（他の人はなるべく動かさない）
+function syncResult(){
+  const r=S.result;if(!r)return;
+  const ok=id=>{const p=byId(id);return p&&!p.absent;};
+  r.a=r.a.filter(ok);r.b=r.b.filter(ok);
+  r.a.slice().forEach(id=>{if(byId(id).pin===2){r.a.splice(r.a.indexOf(id),1);r.b.push(id);justMoved.add(id);}});
+  r.b.slice().forEach(id=>{if(byId(id).pin===1){r.b.splice(r.b.indexOf(id),1);r.a.push(id);justMoved.add(id);}});
+  const inCar=new Set([...r.a,...r.b]);
+  active().forEach(p=>{if(!inCar.has(p.id)){
+    const to=p.pin===1?r.a:p.pin===2?r.b:(r.a.length<=r.b.length?r.a:r.b);
+    to.push(p.id);justMoved.add(p.id);}});
+  S.car1=r.a.length;
+}
+// 指定人数に合わせて、固定されていない人を最小限だけランダムに移動
+function rebalance(){
+  const r=S.result;if(!r)return;clampCar1();
+  const mv=arr=>arr.filter(id=>byId(id).pin===0);
+  const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
+  while(r.a.length>S.car1){const m=mv(r.a);if(!m.length)break;const id=pick(m);r.a.splice(r.a.indexOf(id),1);r.b.push(id);justMoved.add(id);}
+  while(r.a.length<S.car1){const m=mv(r.b);if(!m.length)break;const id=pick(m);r.b.splice(r.b.indexOf(id),1);r.a.push(id);justMoved.add(id);}
+  S.car1=r.a.length;
+}
+
+/* ---------- 描画 ---------- */
+function chipHTML(p,extra){
+  const pin=p.pin?`<span class="pin p${p.pin}">${p.pin}号車固定</span>`:'';
+  return `<button class="chip ${p.absent?'absent':''} ${extra||''}" data-act="person" data-id="${p.id}">${esc(label(p))}${p.absent?'':pin}</button>`;
+}
+function renderMembers(){
+  $('#members').innerHTML='<div class="mgrid">'+S.people.map(p=>chipHTML(p)).join('')+'</div>';
+}
+function renderSplit(){
+  const b=bounds();
+  if(!S.result&&!S.manual)S.car1=Math.ceil(b.n/2);
+  clampCar1();
+  $('#n1').textContent=S.car1;
+  $('#n2').textContent=b.n-S.car1;
+  const absent=S.people.length-b.n;
+  $('#totaltxt').innerHTML=`参加 <b>${b.n}</b>人${absent?`（欠席 ${absent}人）`:''}`;
+  $('#drawbtn').textContent=S.result?'もう一度くじを引く':'くじを引く！';
+}
+function renderResult(){
+  const sec=$('#result');const r=S.result;
+  if(!r){sec.hidden=true;return;}
+  sec.hidden=false;
+  let i=0;
+  const list=(ids)=>{
+    if(!ids.length)return '<div class="empty">（だれも乗っていません）</div>';
+    return sortIds(ids).map(id=>{
+      const cls=revealNext?'reveal':(justMoved.has(id)?'moved':'');
+      const h=chipHTML(byId(id),cls);
+      const d=revealNext?` style="animation-delay:${(i++)*90}ms"`:'';
+      return h.replace('<button ','<button'+d+' ');
+    }).join('');
+  };
+  const abs=S.people.filter(p=>p.absent);
+  const b=bounds();
+  const t=new Date(r.at);
+  $('#rbody').innerHTML=`
+    <div class="rcar c1"><div class="rhead"><span class="cname">${CAR_SVG}1号車</span><span class="rcount">${r.a.length}人</span></div><div class="rlist">${list(r.a)}</div></div>
+    <div class="rcar c2"><div class="rhead"><span class="cname">${CAR_SVG}2号車</span><span class="rcount">${r.b.length}人</span></div><div class="rlist">${list(r.b)}</div></div>
+    ${abs.length?`<div class="absentbox">欠席（タップで出席に戻せます）<div class="chips">${abs.map(p=>chipHTML(p)).join('')}</div></div>`:''}
+    <div class="adjust"><span>1号車の人数を調整<br><small style="color:var(--muted)">必要な人だけ移動します</small></span>
+      <span class="stepper"><button class="sbtn" data-act="step" data-d="-1" aria-label="1号車を1人減らす">−</button><b>${S.car1}</b><button class="sbtn" data-act="step" data-d="1" aria-label="1号車を1人増やす">＋</button></span></div>
+    <div class="rtools">
+      <button class="tool" data-act="copy">結果をコピー</button>
+      <button class="tool light" data-act="draw">引き直す</button>
+    </div>
+    <div class="time">${t.getMonth()+1}/${t.getDate()} ${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')} に抽選　学校名をタップで欠席・移動</div>`;
+}
+function render(){renderMembers();renderSplit();renderResult();save();revealNext=false;const m=justMoved;justMoved=new Set();return m;}
+
+/* ---------- シート（個人設定） ---------- */
+function openSheet(id){
+  sheetId=id;const p=byId(id);if(!p)return;
+  const r=S.result;
+  const inA=r&&r.a.includes(id), inB=r&&r.b.includes(id);
+  $('#sheet').innerHTML=`<div class="grab"></div>
+    <h3>${esc(label(p))}</h3>
+    <div class="field"><label>出欠</label><div class="seg">
+      <button data-act="absent" data-v="0" class="${!p.absent?'sel':''}">出席</button>
+      <button data-act="absent" data-v="1" class="${p.absent?'sel a':''}">欠席</button></div></div>
+    <div class="field"><label>乗る車を固定（運転手など）</label><div class="seg">
+      <button data-act="pin" data-v="0" class="${p.pin===0?'sel':''}">くじで決める</button>
+      <button data-act="pin" data-v="1" class="${p.pin===1?'sel p1':''}">1号車</button>
+      <button data-act="pin" data-v="2" class="${p.pin===2?'sel p2':''}">2号車</button></div></div>
+    <div class="sheetbtns">
+      ${(inA||inB)&&!p.absent?`<button class="tool" data-act="swap">${inA?'2号車':'1号車'}へ移動する</button>`:''}
+      <button class="tool light" data-act="close">閉じる</button>
+    </div>`;
+  $('#back').classList.add('on');$('#sheet').classList.add('on');
+}
+function closeSheet(){
+  const a=document.activeElement;if(a&&a.blur)a.blur();
+  $('#back').classList.remove('on');$('#sheet').classList.remove('on');sheetId=null;render();
+}
+
+/* ---------- 操作 ---------- */
+let resetArm=0;
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const act=el.dataset.act;
+  if(act==='person'){openSheet(el.dataset.id);return;}
+  if(act==='close'){closeSheet();return;}
+  if(act==='step'){
+    const before=S.car1;S.manual=true;S.car1+=Number(el.dataset.d);clampCar1();
+    if(S.car1===before){const b=bounds();toast(b.min||b.n-b.max?'固定メンバーがいるため、これ以上は変更できません':'これ以上は変更できません');return;}
+    if(S.result){rebalance();const m=render();buzz(15);const names=[...m].map(id=>label(byId(id)));if(names.length)toast(names.join('、')+' が移動しました');}
+    else render();
+    return;
+  }
+  if(act==='half'){S.manual=false;S.car1=Math.ceil(bounds().n/2);clampCar1();if(S.result)rebalance();render();return;}
+  if(act==='draw'){startDraw();return;}
+  if(act==='copy'){copyResult();return;}
+  if(act==='reset'){
+    if(Date.now()-resetArm<3000){S=defaultState();save();render();el.textContent='最初の状態に戻す';toast('リセットしました');resetArm=0;window.scrollTo({top:0,behavior:'smooth'});}
+    else{resetArm=Date.now();el.textContent='もう一度押すとリセットします';setTimeout(()=>{el.textContent='最初の状態に戻す';},3000);}
+    return;
+  }
+  // シート内
+  const p=byId(sheetId);if(!p)return;
+  if(act==='absent'){
+    p.absent=el.dataset.v==='1';
+    if(S.result)syncResult();
+    closeSheet();
+    if(S.result)toast(`${label(p)}を${p.absent?'欠席':'出席'}にしました（1号車${S.result.a.length}人・2号車${S.result.b.length}人）`);
+    else toast(`${label(p)}を${p.absent?'欠席':'出席'}にしました`);
+    return;
+  }
+  if(act==='pin'){
+    const v=Number(el.dataset.v);
+    p.pin=v;
+    if(S.result)syncResult();else{clampCar1();}
+    openSheet(p.id);render();return;
+  }
+  if(act==='swap'){
+    const r=S.result;const inA=r.a.includes(p.id);
+    (inA?r.a:r.b).splice((inA?r.a:r.b).indexOf(p.id),1);(inA?r.b:r.a).push(p.id);
+    if(p.pin&&p.pin!==(inA?2:1))p.pin=0;
+    S.car1=r.a.length;justMoved.add(p.id);
+    closeSheet();toast(`${label(p)}を${inA?2:1}号車へ移動しました`);return;
+  }
+});
+
+function startDraw(){
+  const n=active().length;
+  if(n<2){toast('参加者が2人以上必要です');return;}
+  clampCar1();
+  const btn=$('#drawbtn');btn.disabled=true;
+  const ov=$('#shuffle'),tx=$('#shuffletxt');ov.classList.add('on');
+  const names=active().map(label);let k=0;
+  const iv=setInterval(()=>{tx.textContent=names[(k++)%names.length];buzz(8);},70);
+  shuffle(names);
+  setTimeout(()=>{
+    clearInterval(iv);draw();revealNext=true;render();
+    ov.classList.remove('on');btn.disabled=false;buzz([30,40,60]);
+    setTimeout(()=>$('#result').scrollIntoView({behavior:'smooth',block:'start'}),60);
+  },1100);
+}
+
+function resultText(){
+  const r=S.result;if(!r)return '';
+  const line=ids=>sortIds(ids).map(id=>label(byId(id))).join('、')||'なし';
+  const abs=S.people.filter(p=>p.absent).map(label);
+  return `【レンタカー分乗】\n■1号車（${r.a.length}人）\n${line(r.a)}\n■2号車（${r.b.length}人）\n${line(r.b)}`+(abs.length?`\n欠席：${abs.join('、')}`:'');
+}
+function copyResult(){
+  const txt=resultText();
+  const fallback=()=>{const ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.top='-1000px';document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,txt.length);let ok=false;try{ok=document.execCommand('copy');}catch(e){}document.body.removeChild(ta);toast(ok?'コピーしました。LINEなどに貼り付けできます':'コピーできませんでした');};
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>toast('コピーしました。LINEなどに貼り付けできます'),fallback);}
+    else fallback();
+  }catch(e){fallback();}
+}
+
+render();
+})();
+</script>
+</body>
+</html>
